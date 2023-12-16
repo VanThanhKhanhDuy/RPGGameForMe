@@ -242,6 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4863b620061e404fa17188d9f5a859f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDestroyOnLoad: 1
+  move: {x: 0, y: 0, z: 0}
 --- !u!4 &59774042 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
@@ -293,6 +295,19 @@ MonoBehaviour:
   oneHandedAxe: {fileID: 1182897329}
   twoHandedAxe: {fileID: 454344818}
   mug: {fileID: 825337631}
+--- !u!114 &59774047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59774039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b749ca63a94c88548bcb0d0f8715a88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDestroyOnLoad: 1
 --- !u!1 &94586966
 GameObject:
   m_ObjectHideFlags: 0

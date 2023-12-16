@@ -1,0 +1,6 @@
+/*
+ 0 IDLE
+1 WALK
+2 RUN
+4 JUMP
+*/

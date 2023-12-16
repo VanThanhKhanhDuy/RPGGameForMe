@@ -17,7 +17,6 @@ public class WeaponsManager : Singleton<WeaponsManager>
     private void Update()
     {
         ChangeWeapon();
-        
     }
     private void DisableAllWeapons()
     {
