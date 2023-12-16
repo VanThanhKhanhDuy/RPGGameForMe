@@ -24,7 +24,7 @@ public class CameraColision : MonoBehaviour
         defaultDistance = Vector3.Distance(defaultPos, Vector3.zero);
     }
     
-    void LateUpdate()
+    private void LateUpdate()
     {
         UpdateTransPos();
     }
@@ -34,15 +34,12 @@ public class CameraColision : MonoBehaviour
         Vector3 currentPos = defaultPos;
         RaycastHit hit;
         Vector3 dirTmp = parentTransform.TransformPoint(defaultPos) - referenceTransform.position;
+
         if (Physics.SphereCast(referenceTransform.position, collisionOffset, dirTmp, out hit, defaultDistance))
         {
             currentPos = (directionNormalized * (hit.distance - collisionOffset));
+        }
 
-            transform.localPosition = currentPos;
-        }
-        else
-        {
-            transform.localPosition = Vector3.Lerp(transform.localPosition, currentPos, Time.deltaTime * cameraSpeed);
-        }
+        transform.localPosition = Vector3.Lerp(transform.localPosition, currentPos, Time.deltaTime * cameraSpeed);
     }
 }

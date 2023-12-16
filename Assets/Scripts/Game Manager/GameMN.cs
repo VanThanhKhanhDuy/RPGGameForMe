@@ -4,17 +4,11 @@ using UnityEngine;
 public class GameMN : Singleton<GameMN>
 {
     
-    void Start()
+    private void Start()
     {
-        
+        GameInit();
     }
-    
-    void Update()
-    {
-        Init();
-    }
-
-    private void Init()
+    private void GameInit()
     {
         CursorSetting();
         GameSetting();

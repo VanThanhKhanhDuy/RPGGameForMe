@@ -1,21 +1,22 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    
+    private Rigidbody rb;
+    
     private const float speed = 7.5f;
-    private const float jumpSpeed = 8.0f;
-    private const float gravity = 20.0f;
-
-    CharacterController characterController;
-    Vector3 moveDirection = Vector3.zero;
-
-    [HideInInspector]
-    bool canMove = true;
+    private const float jumpForce = 8.0f;
+    
+    
+    private bool isGrounded = true;
+    private bool canMove = true;
 
     private void Start()
     {
-        characterController = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
     }
 
     private void Update()
@@ -25,26 +26,37 @@ public class PlayerController : MonoBehaviour
 
     private void Movement()
     {
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-        float curSpeedX = canMove ? speed * Input.GetAxis("Vertical") : 0;
-        float curSpeedY = canMove ? speed * Input.GetAxis("Horizontal") : 0;
-        moveDirection = (forward * curSpeedX) + (right * curSpeedY);
-
-        if (Input.GetButton("Jump") && canMove)
+        if (canMove)
         {
-            moveDirection.y = jumpSpeed;
+            Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            move = transform.TransformDirection(move);
+            rb.MovePosition(rb.position + move * speed * Time.deltaTime);
+        }
+    }
+
+    private void Jump()
+    {
+        if (canMove && isGrounded)
+        {
+            rb.AddForce(0, jumpForce, 0, ForceMode.Impulse);
+            isGrounded = false;
         }
     }
 
     private void CheckPlayerMovement()
     {
-        if (characterController.isGrounded)
-        {
-            Movement();
-        }
+        Movement();
 
-        moveDirection.y -= gravity * Time.deltaTime;
-        characterController.Move(moveDirection * Time.deltaTime);
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
     }
 }
