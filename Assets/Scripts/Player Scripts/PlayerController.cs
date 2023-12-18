@@ -20,6 +20,8 @@ public class PlayerController : Singleton<PlayerController>
     private bool isWalkingBackward = false;
     private bool isStrafeLeft = false;
     private bool isStrafeRight = false;
+    private bool isWalkingLeft = false;
+    private bool isWalkingRight = false;
     
     public Vector3 move = Vector3.zero;
     
@@ -29,15 +31,21 @@ public class PlayerController : Singleton<PlayerController>
     public bool IsWalkingBackward => isWalkingBackward;
     public bool IsStrafeLeft => isStrafeLeft;
     public bool IsStrafeRight => isStrafeRight;
+    public bool IsWalkingLeft => isWalkingLeft;
+    public bool IsWalkingRight => isWalkingRight;
     
     
 
     private void Start()
     {
+        Init();
+    }
+
+    private void Init()
+    {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
-
     private void Update()
     {
         GetPlayerState();
@@ -61,10 +69,14 @@ public class PlayerController : Singleton<PlayerController>
             {
                 currentSpeed *= strafeMultiplier;
             }
+            if (isWalkingLeft || isWalkingRight)
+            {
+                currentSpeed *= strafeMultiplier; // Adjust the speed for walking left or right
+            }
+
             move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             move = transform.TransformDirection(move);
             rb.MovePosition(rb.position + move * currentSpeed * Time.deltaTime);
-            Debug.Log(currentSpeed);
         }
     }
     private void Jump()
@@ -100,7 +112,9 @@ public class PlayerController : Singleton<PlayerController>
         isWalking = Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0;
         isWalkingBackward = Input.GetAxis("Vertical") < 0;
         isRunning = isWalking && !isWalkingBackward && Input.GetKey(KeyCode.LeftShift);
-        isStrafeLeft = Input.GetAxis("Horizontal") < 0;
-        isStrafeRight = Input.GetAxis("Horizontal") > 0;
+        isStrafeLeft = isRunning && Input.GetAxis("Horizontal") < 0;
+        isStrafeRight = isRunning && Input.GetAxis("Horizontal") > 0;
+        isWalkingLeft = !isRunning && Input.GetAxis("Horizontal") < 0;
+        isWalkingRight = !isRunning && Input.GetAxis("Horizontal") > 0;
     }
 }

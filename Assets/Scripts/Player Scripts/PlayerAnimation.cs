@@ -11,6 +11,8 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     const int jumpState = 4;
     const int runStrafeLeftState = 5;
     const int runStrafeRightState = 6;
+    const int walkLeftState = 7;
+    const int walkRightState = 8;
     
     private Animator playerAnimator;
 
@@ -31,6 +33,8 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
         bool isWalkingBackward = PlayerController.Instance.IsWalkingBackward;
         bool isStrafeLeft = PlayerController.Instance.IsStrafeLeft;
         bool isStrafeRight = PlayerController.Instance.IsStrafeRight;
+        bool isWalkingLeft = PlayerController.Instance.IsWalkingLeft;
+        bool isWalkingRight = PlayerController.Instance.IsWalkingRight;
         
         if (isJump)
         {
@@ -55,9 +59,28 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
                 playerAnimator.SetInteger("State", runState);
             }
         }
-        else if (isWalking)
+         else if (isWalking)
         {
-            playerAnimator.SetInteger("State", walkState);
+            if (isWalkingLeft)
+            {
+                playerAnimator.SetInteger("State", walkLeftState);
+            }
+            else if (isWalkingRight)
+            {
+                playerAnimator.SetInteger("State", walkRightState);
+            }
+            else if (isStrafeLeft)
+            {
+                playerAnimator.SetInteger("State", runStrafeLeftState);
+            }
+            else if (isStrafeRight)
+            {
+                playerAnimator.SetInteger("State", runStrafeRightState);
+            }
+            else
+            {
+                playerAnimator.SetInteger("State", walkState);
+            }
         }
         else
         {
