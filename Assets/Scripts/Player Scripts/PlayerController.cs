@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -48,8 +50,20 @@ public class PlayerController : Singleton<PlayerController>
     }
     private void Update()
     {
-        GetPlayerState();
-        CheckPlayerMovement();
+        CheckAttackWithMove();
+    }
+
+    private void CheckAttackWithMove()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
+        }
+        if (canMove)
+        {
+            GetPlayerState();
+            CheckPlayerMovement();
+        }
     }
 
     private void Movement()
@@ -116,5 +130,25 @@ public class PlayerController : Singleton<PlayerController>
         isStrafeRight = isRunning && Input.GetAxis("Horizontal") > 0;
         isWalkingLeft = !isRunning && Input.GetAxis("Horizontal") < 0;
         isWalkingRight = !isRunning && Input.GetAxis("Horizontal") > 0;
+    }
+    public void Attack()
+    {
+        StartCoroutine(AttackRoutine());
+    }
+
+    private IEnumerator AttackRoutine()
+    {
+        if (IsIdle())
+        {
+            canMove = false; // Disable movement
+            PlayerAnimation.Instance.TriggerAttack(); // Trigger the attack animation
+            yield return new WaitForSeconds(1f); // Wait for the attack animation to finish
+            canMove = true; // Re-enable movement
+        }
+    }
+    private bool IsIdle()
+    {
+        // Check if the player is not performing any action
+        return !isJump && !isWalking && !isRunning && !isWalkingBackward && !isStrafeLeft && !isStrafeRight && !isWalkingLeft && !isWalkingRight;
     }
 }

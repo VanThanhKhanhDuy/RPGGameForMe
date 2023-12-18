@@ -13,6 +13,9 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     const int runStrafeRightState = 6;
     const int walkLeftState = 7;
     const int walkRightState = 8;
+    const int Attack1State = 9;
+    const int Attack2State = 10;
+    const int Attack3State = 11;
     
     private Animator playerAnimator;
 
@@ -23,6 +26,24 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     private void Update()
     {
         CheckPlayerState();
+    }
+    public void TriggerAttack()
+    {
+        playerAnimator.SetInteger("State", idleState); // Set animation to idle
+        StartCoroutine(AttackAnimationRoutine());
+    }
+    private IEnumerator AttackAnimationRoutine()
+    {
+        yield return null; // Wait one frame to ensure the idle state transition if needed
+
+        // Randomly select an attack animation
+        int randomAttack = Random.Range(Attack1State, Attack3State + 1);
+        playerAnimator.SetInteger("State", randomAttack);
+
+        // Optionally wait for the animation to finish before returning to idle
+        // You may want to replace this with the actual duration of the longest attack animation
+        yield return new WaitForSeconds(1f);
+        playerAnimator.SetInteger("State", idleState);
     }
 
     private void CheckPlayerState()
