@@ -80,7 +80,7 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
                 playerAnimator.SetInteger("State", runState);
             }
         }
-         else if (isWalking)
+        else if (isWalking)
         {
             if (isWalkingLeft)
             {

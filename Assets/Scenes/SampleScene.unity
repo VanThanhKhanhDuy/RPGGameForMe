@@ -168,15 +168,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.036120456
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.99934745
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalRotation.z
@@ -188,7 +188,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -184.14
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -684,11 +684,24 @@ MonoBehaviour:
   meshResolution: 1
   edgeIterations: 4
   edgeDistance: 0.5
+  attackRange: 1
   waypoints:
   - {fileID: 524648148}
   - {fileID: 581611576}
   - {fileID: 543076072}
   - {fileID: 1514414454}
+--- !u!114 &139531528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139531520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 226fe517d1181504c9b634bd38b6b487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &454344818 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2765639428920411087, guid: 09c0f8df1c7153b47b1c3680483e566b, type: 3}
@@ -1206,6 +1219,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -7232241048097875652, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -6451060117440161977, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -1554,7 +1571,7 @@ GameObject:
   - component: {fileID: 1622929143}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 8
