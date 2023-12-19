@@ -7,8 +7,8 @@ public class EnemyController : MonoBehaviour
     public NavMeshAgent navMeshAgent;
     public float startWaitTime = 4;
     public float timeToRotate = 2;
-    public float speedWalk = 3;
-    public float speedRun = 5;
+    public float speedWalk = 2;
+    public float speedRun = 4;
     private float chaseCooldown = 1.2f;
     private float currentCooldown;
 
@@ -90,8 +90,18 @@ public class EnemyController : MonoBehaviour
         }
         else if (!m_IsPatrol)
         {
-            enemyAnimation.SetRun();
+            
+            if (navMeshAgent.speed == 0)
+            {
+                
+                enemyAnimation.SetIdle();
+            }
+            else
+            {
+                enemyAnimation.SetRun();
+            }
         }
+        
         else if (navMeshAgent.velocity.magnitude > 0)
         {
             enemyAnimation.SetWalk();

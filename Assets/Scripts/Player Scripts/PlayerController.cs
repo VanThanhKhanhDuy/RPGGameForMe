@@ -8,7 +8,7 @@ public class PlayerController : Singleton<PlayerController>
     
     private Rigidbody rb;
     
-    private const float speed = 7.5f;
+    private const float speed = 6f;
     private const float sprintMultiplier = 1.4f;
     private const float strafeMultiplier = 0.6f;
     private const float jumpForce = 8.0f;

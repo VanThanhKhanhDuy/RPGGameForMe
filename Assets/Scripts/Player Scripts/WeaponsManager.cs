@@ -11,14 +11,15 @@ public class WeaponsManager : Singleton<WeaponsManager>
 
     private void Start()
     {
-        DisableAllWeapons();
+        WeaponsInit();
+        twoHandedAxe.SetActive(true);
     }
 
     private void Update()
     {
         ChangeWeapon();
     }
-    private void DisableAllWeapons()
+    private void WeaponsInit()
     {
         oneHandedAxe.SetActive(false);
         twoHandedAxe.SetActive(false);
@@ -26,7 +27,7 @@ public class WeaponsManager : Singleton<WeaponsManager>
     }
     private void EnableWeapon(GameObject weaponToEnable)
     {
-        DisableAllWeapons();
+        WeaponsInit();
         weaponToEnable.SetActive(true);
         currentWeapon = weaponToEnable;
     }
