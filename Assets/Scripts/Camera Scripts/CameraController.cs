@@ -7,8 +7,6 @@ public class CameraController : MonoBehaviour
     private const float lookXLimit = 60.0f;
 
     Vector2 rotation = Vector2.zero;
-
-    // Camera bobbing variables
     public float walkBobbingSpeed = 10f;
     public float walkBobbingAmount = 0.05f;
     public float runBobbingSpeed = 18f;
@@ -37,8 +35,24 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        CameraRotation();
-        ApplyCameraBobbing();
+        CameraHandle();
+    }
+
+    private void CameraHandle()
+    {
+        CheckPlayerConditionBeforeMoveCamera();
+    }
+
+    private void CheckPlayerConditionBeforeMoveCamera()
+    {
+        if (!PlayerController.Instance.IsDeath)
+        {
+            if (PlayerController.Instance.CanMove || !PlayerController.Instance.IsAttack)
+            {
+                CameraRotation();
+                ApplyCameraBobbing();
+            }
+        }
     }
 
     private void CameraRotation()

@@ -62,16 +62,16 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         EnviromentView();
-        if(Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) <= 1)
-        {
-            Rb.isKinematic = true;
-            
-        }
-        else
-        {
-            Rb.isKinematic = false;
-            
-        }
+        // if(Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) <= 1)
+        // {
+        //     Rb.isKinematic = true;
+        //     
+        // }
+        // else
+        // {
+        //     Rb.isKinematic = false;
+        //     
+        // }
         if (!m_IsPatrol)
         {
             Chasing();
@@ -138,14 +138,12 @@ public class EnemyController : MonoBehaviour
             if (currentCooldown <= 0)
             {
                 float distanceToPlayer = Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position);
-                // Only stop attacking if the player is beyond a certain distance.
                 if (distanceToPlayer > attackRange)
                 {
                     m_CaughtPlayer = false;
                 }
                 else
                 {
-                    // Reset the cooldown to stay in attack mode
                     currentCooldown = chaseCooldown;
                 }
             }

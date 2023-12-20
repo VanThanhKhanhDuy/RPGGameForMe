@@ -5,14 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : Singleton<PlayerController>
 {
-    
     private Rigidbody rb;
     
     private const float speed = 6f;
     private const float sprintMultiplier = 1.4f;
     private const float strafeMultiplier = 0.6f;
     private const float jumpForce = 8.0f;
-    
     
     private bool isGrounded = true;
     private bool canMove = true;
@@ -24,9 +22,12 @@ public class PlayerController : Singleton<PlayerController>
     private bool isStrafeRight = false;
     private bool isWalkingLeft = false;
     private bool isWalkingRight = false;
+    private bool isAttack = false;
+    private bool isDeath = false;
     
     public Vector3 move = Vector3.zero;
     
+    public bool CanMove => canMove;
     public bool IsJump => isJump;
     public bool IsWalking => isWalking;
     public bool IsRunning => isRunning;
@@ -35,6 +36,10 @@ public class PlayerController : Singleton<PlayerController>
     public bool IsStrafeRight => isStrafeRight;
     public bool IsWalkingLeft => isWalkingLeft;
     public bool IsWalkingRight => isWalkingRight;
+    public bool IsAttack => isAttack;
+    public bool IsDeath => isDeath;
+    
+    
     
     
 
@@ -42,15 +47,30 @@ public class PlayerController : Singleton<PlayerController>
     {
         Init();
     }
-
+    
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Die();
+        }
+        CheckForDeath();
+        CheckAttackWithMove();
+    }
     private void Init()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
-    private void Update()
+
+    private void Die()
     {
-        CheckAttackWithMove();
+        isDeath = true;
+        canMove = false;
+    }
+    private void CheckForDeath()
+    {
+        
     }
 
     private void CheckAttackWithMove()
@@ -65,7 +85,7 @@ public class PlayerController : Singleton<PlayerController>
             CheckPlayerMovement();
         }
     }
-
+    
     private void Movement()
     {
         if (canMove)
@@ -85,7 +105,7 @@ public class PlayerController : Singleton<PlayerController>
             }
             if (isWalkingLeft || isWalkingRight)
             {
-                currentSpeed *= strafeMultiplier; // Adjust the speed for walking left or right
+                currentSpeed *= strafeMultiplier;
             }
 
             move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -133,22 +153,26 @@ public class PlayerController : Singleton<PlayerController>
     }
     public void Attack()
     {
-        StartCoroutine(AttackRoutine());
+        if (!isAttack && canMove)
+        {
+            StartCoroutine(AttackRoutine());
+        }
     }
 
     private IEnumerator AttackRoutine()
     {
         if (IsIdle())
         {
-            canMove = false; // Disable movement
-            PlayerAnimation.Instance.TriggerAttack(); // Trigger the attack animation
-            yield return new WaitForSeconds(1f); // Wait for the attack animation to finish
-            canMove = true; // Re-enable movement
+            canMove = false;
+            isAttack = true;
+            PlayerAnimation.Instance.TriggerAttack();
+            yield return new WaitForSeconds(1f);
+            canMove = true;
+            isAttack = false;
         }
     }
     private bool IsIdle()
     {
-        // Check if the player is not performing any action
         return !isJump && !isWalking && !isRunning && !isWalkingBackward && !isStrafeLeft && !isStrafeRight && !isWalkingLeft && !isWalkingRight;
     }
 }

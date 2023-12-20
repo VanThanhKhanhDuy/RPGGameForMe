@@ -4,47 +4,41 @@ using UnityEngine;
 
 public class PlayerAnimation : Singleton<PlayerAnimation>
 {
-    const int idleState = 0;
-    const int walkState = 1;
-    const int runState = 2;
-    const int walkBackwardState = 3;
-    const int jumpState = 4;
-    const int runStrafeLeftState = 5;
-    const int runStrafeRightState = 6;
-    const int walkLeftState = 7;
-    const int walkRightState = 8;
-    const int Attack1State = 9;
-    const int Attack2State = 10;
-    const int Attack3State = 11;
-    
     private Animator playerAnimator;
+    private string currentState;
+    private float transitionDuration = 0.1f;
+    
+    private const string IDLE = "Idle";
+    private const string WALK = "Walk";
+    private const string RUN = "Run";
+    private const string JUMP = "Jump";
+    private const string WALKBACKWARD = "WalkBackward";
+    private const string SPRINTLeFT = "SprintLeft";
+    private const string SPRINTRIGHT = "SprintRight";
+    private const string WALKLEFT = "WalkLeft";
+    private const string WALKRIGHT = "WalkRight";
+    private const string DEATH = "Death";
+ 
+    
 
     private void Start()
     {
         playerAnimator = GetComponent<Animator>();
     }
+
     private void Update()
     {
         CheckPlayerState();
     }
+
     public void TriggerAttack()
     {
-        playerAnimator.SetInteger("State", idleState); // Set animation to idle
-        StartCoroutine(AttackAnimationRoutine());
+        int attackIndex = Random.Range(1, 4);
+        string attackAnimationName = "Attack" + attackIndex;
+        playerAnimator.CrossFade(attackAnimationName, transitionDuration);
     }
-    private IEnumerator AttackAnimationRoutine()
-    {
-        yield return null; // Wait one frame to ensure the idle state transition if needed
-
-        // Randomly select an attack animation
-        int randomAttack = Random.Range(Attack1State, Attack3State + 1);
-        playerAnimator.SetInteger("State", randomAttack);
-
-        // Optionally wait for the animation to finish before returning to idle
-        // You may want to replace this with the actual duration of the longest attack animation
-        yield return new WaitForSeconds(1f);
-        playerAnimator.SetInteger("State", idleState);
-    }
+    
+    
 
     private void CheckPlayerState()
     {
@@ -56,56 +50,63 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
         bool isStrafeRight = PlayerController.Instance.IsStrafeRight;
         bool isWalkingLeft = PlayerController.Instance.IsWalkingLeft;
         bool isWalkingRight = PlayerController.Instance.IsWalkingRight;
+        bool isDeath = PlayerController.Instance.IsDeath;
+
+        if (isDeath)
+        {
+            ChangeAnimationState("Death");
+            return;
+        }
         
         if (isJump)
         {
-            playerAnimator.SetInteger("State", jumpState);
+            ChangeAnimationState("Jump");
         }
         else if (isWalkingBackward)
         {
-            playerAnimator.SetInteger("State", walkBackwardState);
+            ChangeAnimationState("WalkBackward");
         }
         else if (isRunning)
         {
             if (isStrafeLeft)
             {
-                playerAnimator.SetInteger("State", runStrafeLeftState);
+                ChangeAnimationState("SprintLeft");
             }
             else if (isStrafeRight)
             {
-                playerAnimator.SetInteger("State", runStrafeRightState);
+                ChangeAnimationState("SprintRight");
             }
             else
             {
-                playerAnimator.SetInteger("State", runState);
+                ChangeAnimationState("Sprint");
             }
         }
         else if (isWalking)
         {
             if (isWalkingLeft)
             {
-                playerAnimator.SetInteger("State", walkLeftState);
+                ChangeAnimationState("WalkLeft");
             }
             else if (isWalkingRight)
             {
-                playerAnimator.SetInteger("State", walkRightState);
-            }
-            else if (isStrafeLeft)
-            {
-                playerAnimator.SetInteger("State", runStrafeLeftState);
-            }
-            else if (isStrafeRight)
-            {
-                playerAnimator.SetInteger("State", runStrafeRightState);
+                ChangeAnimationState("WalkRight");
             }
             else
             {
-                playerAnimator.SetInteger("State", walkState);
+                ChangeAnimationState("Walk");
             }
         }
         else
         {
-            playerAnimator.SetInteger("State", idleState);
+            ChangeAnimationState("Idle");
         }
+    }
+
+    private void ChangeAnimationState(string newState, float transitionDuration = 0.1f)
+    {
+        if (currentState == newState) return;
+
+        playerAnimator.CrossFade(newState, transitionDuration);
+        currentState = newState;
     }
 }
