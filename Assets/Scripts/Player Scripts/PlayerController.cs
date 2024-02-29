@@ -10,7 +10,7 @@ public class PlayerController : Singleton<PlayerController>
     private const float speed = 6f;
     private const float sprintMultiplier = 1.4f;
     private const float strafeMultiplier = 0.6f;
-    private const float jumpForce = 8.0f;
+    private const float jumpForce = 40.0f;
     
     private bool isGrounded = true;
     private bool canMove = true;
@@ -41,8 +41,6 @@ public class PlayerController : Singleton<PlayerController>
     
     
     
-    
-
     private void Start()
     {
         Init();
@@ -50,11 +48,7 @@ public class PlayerController : Singleton<PlayerController>
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            Die();
-        }
-        CheckForDeath();
+        GetPlayerState();
         CheckAttackWithMove();
     }
     private void Init()
@@ -63,7 +57,12 @@ public class PlayerController : Singleton<PlayerController>
         rb.freezeRotation = true;
     }
 
-    private void Die()
+    private void TakeDamage()
+    {
+        
+    }
+
+    public void Die()
     {
         isDeath = true;
         canMove = false;
@@ -88,30 +87,28 @@ public class PlayerController : Singleton<PlayerController>
     
     private void Movement()
     {
-        if (canMove)
+        if (!canMove) return;
+        var currentSpeed = speed;
+        if (isWalkingBackward)
         {
-            float currentSpeed = speed;
-            if (isWalkingBackward)
-            {
-                currentSpeed *= 0.5f;
-            }
-            if (isRunning)
-            {
-                currentSpeed *= sprintMultiplier;
-            }
-            if (isStrafeLeft || isStrafeRight)
-            {
-                currentSpeed *= strafeMultiplier;
-            }
-            if (isWalkingLeft || isWalkingRight)
-            {
-                currentSpeed *= strafeMultiplier;
-            }
-
-            move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            move = transform.TransformDirection(move);
-            rb.MovePosition(rb.position + move * currentSpeed * Time.deltaTime);
+            currentSpeed *= 0.5f;
         }
+        if (isRunning)
+        {
+            currentSpeed *= sprintMultiplier;
+        }
+        if (isStrafeLeft || isStrafeRight)
+        {
+            currentSpeed *= strafeMultiplier;
+        }
+        if (isWalkingLeft || isWalkingRight)
+        {
+            currentSpeed *= strafeMultiplier;
+        }
+
+        move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        move = transform.TransformDirection(move);
+        rb.MovePosition(rb.position + move * currentSpeed * Time.deltaTime);
     }
     private void Jump()
     {
@@ -141,7 +138,7 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    public void GetPlayerState()
+    private void GetPlayerState()
     {
         isWalking = Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0;
         isWalkingBackward = Input.GetAxis("Vertical") < 0;
@@ -151,7 +148,7 @@ public class PlayerController : Singleton<PlayerController>
         isWalkingLeft = !isRunning && Input.GetAxis("Horizontal") < 0;
         isWalkingRight = !isRunning && Input.GetAxis("Horizontal") > 0;
     }
-    public void Attack()
+    private void Attack()
     {
         if (!isAttack && canMove)
         {
@@ -166,13 +163,13 @@ public class PlayerController : Singleton<PlayerController>
             canMove = false;
             isAttack = true;
             PlayerAnimation.Instance.TriggerAttack();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             canMove = true;
             isAttack = false;
         }
     }
     private bool IsIdle()
     {
-        return !isJump && !isWalking && !isRunning && !isWalkingBackward && !isStrafeLeft && !isStrafeRight && !isWalkingLeft && !isWalkingRight;
+        return !isJump && !isWalking && !isRunning && !isWalkingBackward && !isStrafeLeft && !isStrafeRight && !isWalkingLeft && !isWalkingRight && isGrounded;
     }
 }

@@ -4,15 +4,6 @@ using UnityEngine;
 
 public class GameMN : Singleton<GameMN>
 {
-    
-    
-    private int maxHealth;
-    private int currentHealth;
-    public int MaxHealth => maxHealth;
-  
-
-    
-    
     private void Start()
     {
         GameInit();
@@ -23,25 +14,6 @@ public class GameMN : Singleton<GameMN>
         CursorSetting();
         GameSetting();
     }
-    
-    private void InitializeHealth(GameObject entity)
-    {
-        if (entity.CompareTag("Player"))
-        {
-            maxHealth = 100;
-        }
-        else if (entity.CompareTag("Enemy"))
-        {
-            maxHealth = 50;
-        }
-        currentHealth = maxHealth;
-    }
-
-    public void CheckAndSetHealth(GameObject entity)
-    {
-        InitializeHealth(entity);
-    }
-
     private void CursorSetting()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -52,4 +24,5 @@ public class GameMN : Singleton<GameMN>
     {
         Application.targetFrameRate = 144;
     }
+    
 }

@@ -6,14 +6,15 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
 {
     private Animator playerAnimator;
     private string currentState;
-    private float transitionDuration = 0.1f;
+    
+    private int lastAttackIndex = 0;
     
     private const string IDLE = "Idle";
     private const string WALK = "Walk";
-    private const string RUN = "Run";
+    private const string SPRINT = "Sprint";
     private const string JUMP = "Jump";
     private const string WALKBACKWARD = "WalkBackward";
-    private const string SPRINTLeFT = "SprintLeft";
+    private const string SPRINTLEFT = "SprintLeft";
     private const string SPRINTRIGHT = "SprintRight";
     private const string WALKLEFT = "WalkLeft";
     private const string WALKRIGHT = "WalkRight";
@@ -34,8 +35,14 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     public void TriggerAttack()
     {
         int attackIndex = Random.Range(1, 4);
+        while (attackIndex == lastAttackIndex)
+        {
+            attackIndex = Random.Range(1, 4);
+        }
+        lastAttackIndex = attackIndex;
+
         string attackAnimationName = "Attack" + attackIndex;
-        playerAnimator.CrossFade(attackAnimationName, transitionDuration);
+        playerAnimator.CrossFade(attackAnimationName, 0.3f);
     }
     
     
@@ -54,59 +61,65 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
 
         if (isDeath)
         {
-            ChangeAnimationState("Death");
+            ChangeAnimationState(DEATH);
             return;
         }
         
         if (isJump)
         {
-            ChangeAnimationState("Jump");
+            ChangeAnimationState(JUMP);
         }
         else if (isWalkingBackward)
         {
-            ChangeAnimationState("WalkBackward");
+            ChangeAnimationState(WALKBACKWARD);
         }
         else if (isRunning)
         {
             if (isStrafeLeft)
             {
-                ChangeAnimationState("SprintLeft");
+                ChangeAnimationState(SPRINTLEFT);
             }
             else if (isStrafeRight)
             {
-                ChangeAnimationState("SprintRight");
+                ChangeAnimationState(SPRINTRIGHT);
             }
             else
             {
-                ChangeAnimationState("Sprint");
+                ChangeAnimationState(SPRINT);
             }
         }
         else if (isWalking)
         {
             if (isWalkingLeft)
             {
-                ChangeAnimationState("WalkLeft");
+                ChangeAnimationState(WALKLEFT);
             }
             else if (isWalkingRight)
             {
-                ChangeAnimationState("WalkRight");
+                ChangeAnimationState(WALKRIGHT);
             }
             else
             {
-                ChangeAnimationState("Walk");
+                ChangeAnimationState(WALK);
             }
         }
         else
         {
-            ChangeAnimationState("Idle");
+            ChangeAnimationState(IDLE);
         }
     }
 
     private void ChangeAnimationState(string newState, float transitionDuration = 0.1f)
     {
         if (currentState == newState) return;
-
-        playerAnimator.CrossFade(newState, transitionDuration);
-        currentState = newState;
+        try
+        {
+            playerAnimator.CrossFade(newState, transitionDuration);
+            currentState = newState;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Failed to change animation state. Error: " + e.Message);
+        }
     }
 }

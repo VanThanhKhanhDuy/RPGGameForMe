@@ -9,10 +9,9 @@ public class CameraController : MonoBehaviour
     Vector2 rotation = Vector2.zero;
     public float walkBobbingSpeed = 10f;
     public float walkBobbingAmount = 0.05f;
-    public float runBobbingSpeed = 18f;
-    public float runBobbingAmount = 0.1f;
-
-    private bool isRunning = false;
+    public float runBobbingSpeed = 15f;
+    public float runBobbingAmount = 0.08f;
+    
     private float bobbingSpeed;
     private float bobbingAmount;
     private float midpoint;
@@ -65,13 +64,11 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            isRunning = true;
             bobbingSpeed = runBobbingSpeed;
             bobbingAmount = runBobbingAmount;
         }
         else
         {
-            isRunning = false;
             bobbingSpeed = walkBobbingSpeed;
             bobbingAmount = walkBobbingAmount;
         }

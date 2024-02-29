@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
     public float meshResolution = 1.0f;
     public int edgeIterations = 4;
     public float edgeDistance = 0.5f;
-    public float attackRange = 1f;
+    public float attackRange = 2f;
     
     private Rigidbody Rb;
     private EnemyAnimation enemyAnimation;
@@ -62,16 +62,6 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         EnviromentView();
-        // if(Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position) <= 1)
-        // {
-        //     Rb.isKinematic = true;
-        //     
-        // }
-        // else
-        // {
-        //     Rb.isKinematic = false;
-        //     
-        // }
         if (!m_IsPatrol)
         {
             Chasing();
@@ -204,12 +194,6 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
- 
-    private void OnAnimatorMove()
-    {
- 
-    }
- 
     public void NextPoint()
     {
         m_CurrentWaypointIndex = (m_CurrentWaypointIndex + 1) % waypoints.Length;

@@ -532,6 +532,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDestroyOnLoad: 1
+--- !u!114 &59774048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 59774039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6117bd23fb38604cb86ae02bc144bd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &94586966
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,8 +592,8 @@ MonoBehaviour:
   playerTransform: {fileID: 59774042}
   walkBobbingSpeed: 10
   walkBobbingAmount: 0.05
-  runBobbingSpeed: 18
-  runBobbingAmount: 0.1
+  runBobbingSpeed: 12
+  runBobbingAmount: 0.2
 --- !u!1 &139531520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
@@ -684,11 +696,11 @@ MonoBehaviour:
     m_Bits: 64
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   meshResolution: 1
   edgeIterations: 4
   edgeDistance: 0.5
-  attackRange: 1
+  attackRange: 2
   waypoints:
   - {fileID: 524648148}
   - {fileID: 581611576}
@@ -1173,7 +1185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: 0.43
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1294,6 +1306,10 @@ PrefabInstance:
     - target: {fileID: -1717021435347104307, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -1717021435347104307, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1664270020555540383, guid: 92559db1ee5c6674294c1c013a557099, type: 3}
       propertyPath: m_Layer
@@ -1706,7 +1722,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!65 &2009295067
 BoxCollider:
