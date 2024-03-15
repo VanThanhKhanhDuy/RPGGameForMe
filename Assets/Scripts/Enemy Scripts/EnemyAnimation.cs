@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyAnimation : MonoBehaviour
 {
+    private Attack attackComponent;
     private Animator enemyAnimator;
     private string currentState;
     private float transitionDuration = 0.1f;
@@ -13,9 +14,15 @@ public class EnemyAnimation : MonoBehaviour
     private const string IDLE = "Idle";
     private const string WALK = "Walk";
     private const string RUN = "Run";
+    private const string DIE = "Die";
 
     private void Start()
     {
+        attackComponent = GetComponent<Attack>();
+        if (attackComponent != null)
+        {
+            attackComponent.SetDamage(10); // Set the attack damage for the enemy
+        }
         enemyAnimator = GetComponent<Animator>();
     }
 
@@ -34,6 +41,11 @@ public class EnemyAnimation : MonoBehaviour
         ChangeAnimationState(RUN);
     }
 
+    public void SetDie()
+    {
+        ChangeAnimationState(DIE);
+    }
+
     public void SetAttack()
     {
         if (isAttacking) return; // Prevent new attack if already attacking
@@ -44,6 +56,8 @@ public class EnemyAnimation : MonoBehaviour
         enemyAnimator.CrossFade(attackAnimationName, transitionDuration);
         // You could use a coroutine to reset the flag after the animation duration
         StartCoroutine(ResetAttackFlag(attackAnimationName));
+        AttackTarget();
+
     }
     private IEnumerator ResetAttackFlag(string animationName)
     {
@@ -51,7 +65,18 @@ public class EnemyAnimation : MonoBehaviour
         yield return new WaitForSeconds(enemyAnimator.GetCurrentAnimatorStateInfo(0).length);
         isAttacking = false; // Reset the attacking flag
     }
-
+    private void AttackTarget()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 100))
+        {
+            Health healthComponent = hit.transform.GetComponent<Health>();
+            if (healthComponent != null)
+            {
+                attackComponent.PerformAttack(healthComponent); // Perform the attack on the target's health component
+            }
+        }
+    }
 
     private void ChangeAnimationState(string newState, float transitionDuration = 0.1f)
     {

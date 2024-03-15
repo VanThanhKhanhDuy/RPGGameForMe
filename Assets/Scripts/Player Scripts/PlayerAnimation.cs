@@ -8,7 +8,7 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     private string currentState;
     
     private int lastAttackIndex = 0;
-    
+    #region Move State
     private const string IDLE = "Idle";
     private const string WALK = "Walk";
     private const string SPRINT = "Sprint";
@@ -19,8 +19,8 @@ public class PlayerAnimation : Singleton<PlayerAnimation>
     private const string WALKLEFT = "WalkLeft";
     private const string WALKRIGHT = "WalkRight";
     private const string DEATH = "Death";
- 
-    
+    #endregion
+
 
     private void Start()
     {

@@ -6,12 +6,16 @@ using UnityEngine;
 public class PlayerController : Singleton<PlayerController>
 {
     private Rigidbody rb;
+    private Attack attackComponent;
     
+    #region Move Stat
     private const float speed = 6f;
     private const float sprintMultiplier = 1.4f;
     private const float strafeMultiplier = 0.6f;
     private const float jumpForce = 40.0f;
+    #endregion
     
+    #region Move State
     private bool isGrounded = true;
     private bool canMove = true;
     private bool isJump = false;
@@ -38,6 +42,7 @@ public class PlayerController : Singleton<PlayerController>
     public bool IsWalkingRight => isWalkingRight;
     public bool IsAttack => isAttack;
     public bool IsDeath => isDeath;
+    #endregion
     
     
     
@@ -55,17 +60,13 @@ public class PlayerController : Singleton<PlayerController>
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        attackComponent = GetComponent<Attack>();
     }
-
-    private void TakeDamage()
-    {
-        
-    }
-
+    
     public void Die()
     {
-        isDeath = true;
         canMove = false;
+        isDeath = true;
     }
     private void CheckForDeath()
     {
@@ -91,7 +92,7 @@ public class PlayerController : Singleton<PlayerController>
         float horInput = Input.GetAxis("Horizontal");
         float verInput = Input.GetAxis("Vertical");
         float currentSpeed = speed * (isWalkingBackward ? 0.5f : 1f) * (isRunning ? sprintMultiplier : 1f)
-                            * (isStrafeLeft || isStrafeRight ? strafeMultiplier : 1f) * (isWalkingLeft || isWalkingRight ? strafeMultiplier : 1f);
+                                   * (isStrafeLeft || isStrafeRight ? strafeMultiplier : 1f) * (isWalkingLeft || isWalkingRight ? strafeMultiplier : 1f);
 
         Vector3 move = new Vector3(horInput, 0f, verInput);
         rb.MovePosition(rb.position + transform.TransformVector(move) * currentSpeed * Time.deltaTime);
@@ -139,9 +140,21 @@ public class PlayerController : Singleton<PlayerController>
         if (!isAttack && canMove)
         {
             StartCoroutine(AttackRoutine());
+            AttackTarget();
         }
     }
-
+    private void AttackTarget()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 100))
+        {
+            Health healthComponent = hit.transform.GetComponent<Health>();
+            if (healthComponent != null)
+            {
+                attackComponent.PerformAttack(healthComponent); // Perform the attack on the target's health component
+            }
+        }
+    }
     private IEnumerator AttackRoutine()
     {
         if (IsIdle())

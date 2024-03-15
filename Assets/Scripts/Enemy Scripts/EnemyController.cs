@@ -31,15 +31,17 @@ public class EnemyController : MonoBehaviour
     Vector3 playerLastPosition = Vector3.zero;
     Vector3 m_PlayerPosition;
  
-    float m_WaitTime;
-    float m_TimeToRotate;
-    bool m_playerInRange;
-    bool m_PlayerNear;
-    bool m_IsPatrol;
-    bool m_CaughtPlayer;
+    private float m_WaitTime;
+    private float m_TimeToRotate;
+    private bool m_playerInRange;
+    private bool m_PlayerNear;
+    private bool m_IsPatrol;
+    private bool m_CaughtPlayer;
+    public static bool isDead = false;
  
     void Start()
     {
+
         enemyAnimation = GetComponent<EnemyAnimation>();
         m_PlayerPosition = Vector3.zero;
         m_IsPatrol = true;
@@ -74,9 +76,22 @@ public class EnemyController : MonoBehaviour
     }
     private void UpdateAnimationState()
     {
+        if (isDead)
+        {
+            enemyAnimation.SetDie();
+            GetComponent<EnemyController>().enabled = false;
+            return;
+        }
         if (m_CaughtPlayer)
         {
             enemyAnimation.SetAttack();
+            Vector3 directionToPlayer = (m_PlayerPosition - transform.position).normalized;
+    
+            // Calculate the rotation to look at the player
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+    
+            // Set the enemy's rotation to look at the player
+            transform.rotation = Quaternion.Euler(0, lookRotation.eulerAngles.y, 0);
         }
         else if (!m_IsPatrol)
         {
@@ -118,7 +133,6 @@ public class EnemyController : MonoBehaviour
                 m_CaughtPlayer = true;
                 currentCooldown = chaseCooldown;
                 enemyAnimation.SetAttack();
-                //Attack function here
             }
         }
         if (currentCooldown > 0)
@@ -157,7 +171,6 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
- 
     private void Patroling()
     {
         if (m_PlayerNear)

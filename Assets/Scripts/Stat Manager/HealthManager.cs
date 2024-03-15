@@ -10,8 +10,8 @@ public class HealthManager : Singleton<HealthManager>
     }
     private void SetHealthForAll()
     {
-        SetHealthForTag("Player", 50);
-        SetHealthForTag("Enemy", 40);
+        SetHealthForTag("Player", Health.maxHealth);
+        SetHealthForTag("Enemy", Health.maxHealth -= 50);
     }
 
     private void SetHealthForTag(string tag, int health)
