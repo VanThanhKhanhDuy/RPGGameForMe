@@ -88,27 +88,13 @@ public class PlayerController : Singleton<PlayerController>
     private void Movement()
     {
         if (!canMove) return;
-        var currentSpeed = speed;
-        if (isWalkingBackward)
-        {
-            currentSpeed *= 0.5f;
-        }
-        if (isRunning)
-        {
-            currentSpeed *= sprintMultiplier;
-        }
-        if (isStrafeLeft || isStrafeRight)
-        {
-            currentSpeed *= strafeMultiplier;
-        }
-        if (isWalkingLeft || isWalkingRight)
-        {
-            currentSpeed *= strafeMultiplier;
-        }
+        float horInput = Input.GetAxis("Horizontal");
+        float verInput = Input.GetAxis("Vertical");
+        float currentSpeed = speed * (isWalkingBackward ? 0.5f : 1f) * (isRunning ? sprintMultiplier : 1f)
+                            * (isStrafeLeft || isStrafeRight ? strafeMultiplier : 1f) * (isWalkingLeft || isWalkingRight ? strafeMultiplier : 1f);
 
-        move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        move = transform.TransformDirection(move);
-        rb.MovePosition(rb.position + move * currentSpeed * Time.deltaTime);
+        Vector3 move = new Vector3(horInput, 0f, verInput);
+        rb.MovePosition(rb.position + transform.TransformVector(move) * currentSpeed * Time.deltaTime);
     }
     private void Jump()
     {
